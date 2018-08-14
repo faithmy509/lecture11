@@ -56,6 +56,11 @@ class Model():
                 tf.summary.histogram('embed', embed)
 
             data = tf.nn.embedding_lookup(embed, self.X)
+            
+        def get_a_cell(lstm_size, keep_prob):
+            lstm = tf.nn.rnn_cell.BasicLSTMCell(lstm_size)
+            drop = tf.nn.rnn_cell.DropoutWrapper(lstm, output_keep_prob=keep_prob)
+            return drop    
 
         with tf.variable_scope('rnn'):
             cell = tf.nn.rnn_cell.MultiRNNCell(
@@ -76,14 +81,21 @@ class Model():
             W = tf.get_variable('W', [self.dim_embedding, self.num_words])
             b = tf.get_variable('b', [self.num_words])
 
+        print("22222")    
+        print(seq_output_final)    
         logits = tf.matmul(seq_output_final, W) + b            
 
         tf.summary.histogram('logits', logits)
 
         self.predictions = tf.nn.softmax(logits, name='predictions')
+        
+        y_one_hot = tf.one_hot(self.Y, self.num_words)
+        print('y_one_hot.shape:',y_one_hot.shape)
+        y_reshaped = tf.reshape(y_one_hot, logits.get_shape())
 
-        loss = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=tf.reshape(self.Y, [-1])
-		print(logits)
+        loss = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logits, labels=y_reshaped)
+        print("1111")
+       #print(logits)
         mean, var = tf.nn.moments(logits, -1)
         self.loss = tf.reduce_mean(loss)
         tf.summary.scalar('logits_loss', self.loss)
