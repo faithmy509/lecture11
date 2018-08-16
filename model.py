@@ -81,19 +81,20 @@ class Model():
             W = tf.get_variable('W', [self.dim_embedding, self.num_words])
             b = tf.get_variable('b', [self.num_words])
 
-        print("22222")    
-        print(seq_output_final)    
+        #print("22222")    
+        #print(seq_output_final)    
         logits = tf.matmul(seq_output_final, W) + b            
 
         tf.summary.histogram('logits', logits)
 
         self.predictions = tf.nn.softmax(logits, name='predictions')
         
-        y_one_hot = tf.one_hot(self.Y, self.num_words)
-        print('y_one_hot.shape:',y_one_hot.shape)
-        y_reshaped = tf.reshape(y_one_hot, logits.get_shape())
+        #y_one_hot = tf.one_hot(self.Y, self.num_words)
+        #print('y_one_hot.shape:',y_one_hot.shape)
+        #print('logits shape:',logits.get_shape())
+        #y_reshaped = tf.reshape(y_one_hot, [-1])
 
-        loss = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logits, labels=y_reshaped)
+        loss = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logits, labels=tf.reshape(self.Y, [-1]))
         print("1111")
        #print(logits)
         mean, var = tf.nn.moments(logits, -1)
