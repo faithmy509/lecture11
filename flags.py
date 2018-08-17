@@ -12,7 +12,7 @@ current_time = datetime.datetime.now(tz)
 
 def parse_args(check=True):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--output_dir', type=str, default='./rnn_log',
+    parser.add_argument('--output_dir', type=str, default='/output/rnn_log',
                         help='path to save log and checkpoint.')
 
     parser.add_argument('--text', type=str, default='/data/faithmy509/lecture11/QuanSongCi.txt',
@@ -24,10 +24,10 @@ def parse_args(check=True):
     parser.add_argument('--batch_size', type=int, default=3,
                         help='batch size to use.')
 
-    parser.add_argument('--dictionary', type=str, default='dictionary.json',
+    parser.add_argument('--dictionary', type=str, default='/data/faithmy509/lecture11/dictionary.json',
                         help='path to dictionary.json.')
 
-    parser.add_argument('--reverse_dictionary', type=str, default='reverse_dictionary.json',
+    parser.add_argument('--reverse_dictionary', type=str, default='/data/faithmy509/lecture11/reverse_dictionary.json',
                         help='path to reverse_dictionary.json.')
 
     parser.add_argument('--learning_rate', type=float, default=0.001,
@@ -36,7 +36,7 @@ def parse_args(check=True):
     parser.add_argument('--keep_prob', type=float, default=0.5,
                         help='keep prop')
 
-    parser.add_argument('--restore_constant_checkout', type=str, default='/data/my-rnn-model/model.ckpt',
+    parser.add_argument('--restore_constant_checkout', type=str, default='/output/model.ckpt',
                         help='keep prop')                        
 
     FLAGS, unparsed = parser.parse_known_args()
